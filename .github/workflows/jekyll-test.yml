@@ -18,6 +18,8 @@ jobs:
           ruby-version: "3.4"
           working-directory: jekyll
           bundler-cache: true
+      - name: ImageMagick (за галерията)
+        run: command -v convert >/dev/null || command -v magick >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends imagemagick)
       - name: Билд
         working-directory: jekyll
         env:

@@ -32,7 +32,7 @@ jobs:
           ruby-version: "3.4"
           bundler-cache: true
       - name: ImageMagick (за галерията)
-        run: command -v convert >/dev/null || command -v magick >/dev/null || (sudo apt-get update && sudo apt-get install -y imagemagick)
+        run: command -v convert >/dev/null || command -v magick >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends imagemagick)
       - name: Билд
         run: |
           if [[ -z "${DATABASE_URL:-}" ]]; then echo "::notice::Няма secret DATABASE_URL – проектите идват от JSON файла. Добави го в Settings → Secrets and variables → Actions → Secrets."; fi
