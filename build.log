@@ -1,0 +1,35 @@
+ruby 3.4.11 (2026-09-23 revision 592f1ffdb3) +PRISM [x86_64-linux]
+Bundler version 2.6.9
+v22.23.3
+/usr/bin/convert
+KaTeX v0.17.0
+Configuration file: /home/runner/work/test-site/test-site/jekyll/_config.yml
+Configuration file: /home/runner/work/test-site/test-site/jekyll/_config.ci.yml
+            Source: /home/runner/work/test-site/test-site/jekyll
+       Destination: /home/runner/work/test-site/test-site/jekyll/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating... 
+[neon] Заредени 4 проекта от Neon. 
+[33m[github] /repos/your-username/esp32-weather: HTTP 404 [0m
+[33m[github] /repos/your-username/transit-bot: HTTP 404 [0m
+[33m[github] /repos/your-username/quake-map: HTTP 404 [0m
+[33m[github] /repos/your-username/your-username.github.io: HTTP 404 [0m
+[33m[github] /repos/11ty/eleventy: HTTP 301 [0m
+                    done in 6.64 seconds.
+ Auto-regeneration: disabled. Use --watch to enable.
+build_ms=7590 exit=0
+Configuration file: /home/runner/work/test-site/test-site/jekyll/_config.yml
+Configuration file: /home/runner/work/test-site/test-site/jekyll/_config.ci.yml
+            Source: /home/runner/work/test-site/test-site/jekyll
+       Destination: /home/runner/work/test-site/test-site/jekyll/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating... 
+[neon] Заредени 4 проекта от Neon. 
+[33m[github] /repos/your-username/esp32-weather: HTTP 404 [0m
+[33m[github] /repos/your-username/transit-bot: HTTP 404 [0m
+[33m[github] /repos/your-username/quake-map: HTTP 404 [0m
+[33m[github] /repos/your-username/your-username.github.io: HTTP 404 [0m
+[33m[github] /repos/11ty/eleventy: HTTP 301 [0m
+                    done in 3.043 seconds.
+ Auto-regeneration: disabled. Use --watch to enable.
+warm_build_ms=3531

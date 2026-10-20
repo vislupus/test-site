@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Защо започвам бележник – Бележник</title>
+  <meta name="description" content="Първата публикация – какво ще пиша тук и как е направен сайтът.">
+  <meta name="generator" content="Jekyll v4.4.1">
+  <link rel="icon" href="/ssg/jekyll/favicon.svg" type="image/svg+xml">
+  <link rel="canonical" href="https://example.github.io/ssg/jekyll/blog/zashto-belezhnik/">
+  <link rel="alternate" type="application/rss+xml" title="Бележник" href="/ssg/jekyll/rss.xml">
+  <link rel="stylesheet" href="/ssg/jekyll/assets/css/site.css">
+  <link rel="stylesheet" href="/ssg/jekyll/assets/css/rouge.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Към съдържанието</a>
+  <div class="wrap">
+    <header class="site-header">
+      <a class="brand" href="/ssg/jekyll/">Бележник</a>
+      <nav class="site-nav" aria-label="Основна навигация">
+        <ul>
+          <li><a href="/ssg/jekyll/blog/" aria-current="page">Блог</a></li>
+          <li><a href="/ssg/jekyll/projects/">Проекти</a></li>
+          <li><a href="/ssg/jekyll/gallery/">Галерия</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      <article>
+  <header class="post-header">
+    <h1 class="page-title">Защо започвам бележник</h1>
+    <p class="post-meta"><time datetime="2026-09-01">1 септември 2026 г.</time>, 1 мин. четене</p>
+    
+<ul class="tags" aria-label="Етикети">
+  <li><a href="/ssg/jekyll/tags/%D0%B1%D0%B5%D0%BB%D0%B5%D0%B6%D0%BA%D0%B8/">бележки</a></li>
+  <li><a href="/ssg/jekyll/tags/%D1%83%D0%B5%D0%B1/">уеб</a></li>
+</ul>
+
+  </header>
+  <div class="prose">
+    <p>Дълго време си записвах нещата по тетрадки, в бележки на телефона и в README файлове, които никой не чете. Този сайт ги събира на едно място: кратки бележки, проекти, формули, маршрути и снимки.</p>
+
+<h2 id="какво-ще-има-тук">Какво ще има тук</h2>
+
+<ul>
+  <li><strong>Блог</strong> – всяка публикация е обикновен Markdown файл в хранилището.</li>
+  <li><strong>Проекти</strong> – списъкът идва от база данни в Neon, а ако няма връзка – от JSON файл.</li>
+  <li><strong>Карти и формули</strong> – само там, където текстът има нужда от тях.</li>
+  <li><strong>Галерия</strong> – снимки от разходки.</li>
+</ul>
+
+<p><img src="/ssg/jekyll/img/blog/mountain-lake-800.webp" srcset="/ssg/jekyll/img/blog/mountain-lake-800.webp 800w, /ssg/jekyll/img/blog/mountain-lake-1400.webp 1400w" sizes="(min-width: 48rem) 44rem, 100vw" width="1400" height="934" alt="Езеро под върховете в мъгливо утро" loading="lazy" decoding="async"></p>
+
+<h2 id="как-се-публикува">Как се публикува</h2>
+
+<p>Всяка промяна в клона <code class="language-plaintext highlighter-rouge">main</code> пуска GitHub Actions, който генерира статичния сайт и го качва в GitHub Pages. Целият цикъл е един ред:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add <span class="nb">.</span> <span class="o">&amp;&amp;</span> git commit <span class="nt">-m</span> <span class="s2">"Нова публикация"</span> <span class="o">&amp;&amp;</span> git push
+</code></pre></div></div>
+
+<p>А ето малката функция, която смята времето за четене най-горе на страницата:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">export</span> <span class="kd">function</span> <span class="nf">readingTime</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">wordsPerMinute</span> <span class="o">=</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">words</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nf">trim</span><span class="p">().</span><span class="nf">split</span><span class="p">(</span><span class="sr">/</span><span class="se">\s</span><span class="sr">+/</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">round</span><span class="p">(</span><span class="nx">words</span> <span class="o">/</span> <span class="nx">wordsPerMinute</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Добрата бележка е тази, която след година ще разбереш без контекст.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th>Част</th>
+      <th>Къде живее</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Публикации</td>
+      <td><code class="language-plaintext highlighter-rouge">_posts/*.md</code></td>
+    </tr>
+    <tr>
+      <td>Проекти</td>
+      <td>Neon или <code class="language-plaintext highlighter-rouge">_data/projects.json</code></td>
+    </tr>
+    <tr>
+      <td>Снимки</td>
+      <td><code class="language-plaintext highlighter-rouge">_gallery/</code></td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+</article>
+
+    </main>
+    <footer class="site-footer">
+      <p>Генерирано с Jekyll 4.4.1 на 20 октомври 2026 г.</p>
+      <ul>
+        <li><a href="/ssg/jekyll/rss.xml">RSS</a></li>
+        <li><a href="https://github.com/your-username">GitHub</a></li>
+      </ul>
+    </footer>
+  </div>
+</body>
+</html>
