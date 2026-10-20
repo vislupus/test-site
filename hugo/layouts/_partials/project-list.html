@@ -1,4 +1,7 @@
 {{- $heading := .heading -}}
+{{- if not .items }}
+<p class="notice">{{ .empty | default "Още няма проекти. Добави ред в таблицата projects в Neon или в data/projects.json." }}</p>
+{{- end }}
 <ol class="project-list">
   {{- range .items }}
   <li class="project">

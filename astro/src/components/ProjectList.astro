@@ -2,13 +2,14 @@
 import type { CollectionEntry } from "astro:content";
 import { getRepo } from "../lib/github";
 import RepoMeta from "./RepoMeta.astro";
-interface Props { projects: CollectionEntry<"projects">[]; heading?: "h2" | "h3" }
-const { projects, heading: H = "h2" } = Astro.props;
+interface Props { projects: CollectionEntry<"projects">[]; heading?: "h2" | "h3"; empty?: string }
+const { projects, heading: H = "h2", empty = "Още няма проекти. Добави ред в таблицата projects в Neon или в src/data/projects.json." } = Astro.props;
 // Обогатяваме проектите с данни от GitHub (звезди, език, последна промяна).
 const items = await Promise.all(
   projects.map(async (p) => ({ ...p.data, gh: p.data.repo ? await getRepo(p.data.repo) : null }))
 );
 ---
+{items.length === 0 && <p class="notice">{empty}</p>}
 <ol class="project-list">
   {items.map((p) => (
     <li class="project">

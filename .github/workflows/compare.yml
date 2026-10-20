@@ -60,6 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          if [[ -z "${DATABASE_URL:-}" ]]; then echo "::notice::Няма secret DATABASE_URL – проектите идват от JSON файла. Добави го в Settings → Secrets and variables → Actions → Secrets."; fi
           mkdir -p out
           ms() { date +%s%3N; }
 

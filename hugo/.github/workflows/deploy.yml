@@ -39,7 +39,8 @@ jobs:
       - name: Проекти от Neon
         run: |
           command -v psql >/dev/null || (sudo apt-get update && sudo apt-get install -y postgresql-client)
-          ./scripts/fetch-neon.sh
+          if [[ -z "${DATABASE_URL:-}" ]]; then echo "::notice::Няма secret DATABASE_URL – проектите идват от JSON файла. Добави го в Settings → Secrets and variables → Actions → Secrets."; fi
+          bash scripts/fetch-neon.sh
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - name: Билд

@@ -53,7 +53,7 @@ tags: [бележки]
 Шаблоните на Hugo не могат да се свържат с Postgres, затова данните се теглят преди билда с `psql`:
 
 ```bash
-DATABASE_URL="postgresql://…neon.tech/neondb?sslmode=require" ./scripts/fetch-neon.sh
+DATABASE_URL="postgresql://…neon.tech/neondb?sslmode=require" bash scripts/fetch-neon.sh
 hugo server
 ```
 

@@ -5,7 +5,8 @@
 {{- $source := "local" -}}
 {{- $items := hugo.Data.projects -}}
 {{- with index hugo.Data "neon" -}}
-  {{- with .projects -}}{{- $items = . -}}{{- $source = "neon" -}}{{- end -}}
+  {{- /* isset, а не with: празна таблица в Neon е валиден резултат, не повод за JSON-а. */ -}}
+  {{- if isset . "projects" -}}{{- $items = .projects -}}{{- $source = "neon" -}}{{- end -}}
 {{- end -}}
 {{- $items = (where $items "featured" true) | append (where $items "featured" "!=" true) -}}
 {{- $enriched := slice -}}

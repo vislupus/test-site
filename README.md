@@ -123,7 +123,7 @@ $$
 4. В GitHub: **Settings → Secrets and variables → Actions → New repository secret**, име `DATABASE_URL`, стойност – connection string-ът от Neon (`postgresql://…neon.tech/neondb?sslmode=require`).
 5. Пусни workflow-а отново. Отдолу на страницата „Проекти“ пише откъде са заредени данните.
 
-Локално: `DATABASE_URL="postgresql://…" npm run build` (Astro, Eleventy) или `DATABASE_URL="…" ./scripts/fetch-neon.sh && hugo server` (Hugo).
+Локално: `DATABASE_URL="postgresql://…" npm run build` (Astro, Eleventy) или `DATABASE_URL="…" bash scripts/fetch-neon.sh && hugo server` (Hugo).
 
 | | Как се чете Neon |
 | --- | --- |

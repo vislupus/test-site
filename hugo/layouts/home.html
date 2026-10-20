@@ -10,7 +10,7 @@
 
 <h2 class="section-title">Избрани проекти</h2>
 {{ $projects := partial "projects.html" . }}
-{{ partial "project-list.html" (dict "items" (where $projects.items "featured" true) "heading" "h3") }}
+{{ partial "project-list.html" (dict "items" (where $projects.items "featured" true) "heading" "h3" "empty" "Още няма избрани проекти. Задай featured = true на проект, за да се появи тук.") }}
 <p><a class="more" href="{{ "projects/" | relURL }}">Всички проекти</a></p>
 
 <h2 class="section-title">От галерията</h2>

@@ -33,7 +33,9 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Билд
-        run: npm run build
+        run: |
+          if [[ -z "${DATABASE_URL:-}" ]]; then echo "::notice::Няма secret DATABASE_URL – проектите идват от JSON файла. Добави го в Settings → Secrets and variables → Actions → Secrets."; fi
+          npm run build
         env:
           SITE_URL: ${{ steps.pages.outputs.origin }}
           PATH_PREFIX: ${{ steps.pages.outputs.base_path }}/

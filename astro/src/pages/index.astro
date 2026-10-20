@@ -23,7 +23,7 @@ const featured = (await getCollection("projects", ({ data }) => data.featured)).
   <p><a class="more" href={url("blog/")}>Всички публикации</a></p>
 
   <h2 class="section-title">Избрани проекти</h2>
-  <ProjectList projects={featured} heading="h3" />
+  <ProjectList projects={featured} heading="h3" empty="Още няма избрани проекти. Задай featured = true на проект, за да се появи тук." />
   <p><a class="more" href={url("projects/")}>Всички проекти</a></p>
 
   <h2 class="section-title">От галерията</h2>

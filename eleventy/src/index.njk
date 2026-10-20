@@ -12,7 +12,7 @@ layout: layouts/base.njk
 <p><a class="more" href="/blog/">Всички публикации</a></p>
 
 <h2 class="section-title">Избрани проекти</h2>
-{% set items = projects.featured %}{% set heading = "h3" %}
+{% set items = projects.featured %}{% set heading = "h3" %}{% set empty = "Още няма избрани проекти. Задай featured = true на проект, за да се появи тук." %}
 {% include "partials/project-list.njk" %}
 <p><a class="more" href="/projects/">Всички проекти</a></p>
 

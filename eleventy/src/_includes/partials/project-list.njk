@@ -1,4 +1,7 @@
-{#- Очаква: items (масив от проекти), heading ("h2" или "h3") -#}
+{#- Очаква: items (масив от проекти), heading ("h2" или "h3"), по желание empty (текст при празен списък) -#}
+{%- if not items.length %}
+<p class="notice">{{ empty or "Още няма проекти. Добави ред в таблицата projects в Neon или в data/projects.json." }}</p>
+{%- endif %}
 <ol class="project-list">
   {%- for p in items %}
   <li class="project">

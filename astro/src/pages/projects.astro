@@ -7,7 +7,8 @@ import { getUserRepos } from "../lib/github";
 import { SITE } from "../site.config";
 
 const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
-const source = projects[0]?.data.source ?? "local";
+// Същото правило като в src/lib/neon-projects.js: с DATABASE_URL данните идват само от Neon.
+const source = process.env.DATABASE_URL ? "neon" : "local";
 const configured = SITE.githubUser !== "your-username";
 const repos = configured ? await getUserRepos(SITE.githubUser) : null;
 ---
