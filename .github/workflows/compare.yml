@@ -72,7 +72,7 @@ jobs:
           eleventy_ms=$(( $(ms) - t ))
 
           t=$(ms)
-          (cd hugo && ./scripts/fetch-neon.sh && hugo --gc --minify --baseURL "$PAGES_BASE_URL/hugo/")
+          (cd hugo && bash scripts/fetch-neon.sh && hugo --gc --minify --baseURL "$PAGES_BASE_URL/hugo/")
           hugo_ms=$(( $(ms) - t ))
 
           cp -r astro/dist out/astro
