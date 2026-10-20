@@ -1,0 +1,13 @@
+---
+layout: base
+---
+<article>
+  <header class="post-header">
+    <h1 class="page-title">{{ page.title }}</h1>
+    <p class="post-meta"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date_long }}</time>, {{ content | reading_time }} мин. четене</p>
+    {% include tags.html tags=page.tags %}
+  </header>
+  <div class="prose">
+    {{ content }}
+  </div>
+</article>

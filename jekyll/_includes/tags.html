@@ -1,0 +1,8 @@
+{%- if include.tags.size > 0 %}
+<ul class="tags" aria-label="Етикети">
+  {%- for t in include.tags %}
+  {%- capture href %}/tags/{{ t | tag_slug }}/{% endcapture %}
+  <li><a href="{{ href | relative_url }}">{{ t }}</a></li>
+  {%- endfor %}
+</ul>
+{%- endif %}

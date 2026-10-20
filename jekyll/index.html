@@ -1,0 +1,19 @@
+---
+layout: base
+---
+<section class="hero">
+  <h1>{{ site.title }}</h1>
+  <p class="lede">{{ site.lede }}<span>{{ site.lede_more }}</span></p>
+</section>
+
+<h2 class="section-title">Последни публикации</h2>
+{% include post-list.html posts=site.posts limit=3 %}
+<p><a class="more" href="{{ '/blog/' | relative_url }}">Всички публикации</a></p>
+
+<h2 class="section-title">Избрани проекти</h2>
+{% include project-list.html items=site.data.projects.featured heading="h3" empty="Още няма избрани проекти. Задай featured = true на проект, за да се появи тук." %}
+<p><a class="more" href="{{ '/projects/' | relative_url }}">Всички проекти</a></p>
+
+<h2 class="section-title">От галерията</h2>
+{% include gallery.html limit=4 strip=true %}
+<p><a class="more" href="{{ '/gallery/' | relative_url }}">Цялата галерия</a></p>

@@ -1,0 +1,25 @@
+{%- comment -%} Параметри: items, heading ("h2" или "h3"), empty (текст при празен списък) {%- endcomment -%}
+{%- assign heading = include.heading | default: "h2" %}
+{%- if include.items.size == 0 %}
+<p class="notice">{{ include.empty | default: "Още няма проекти. Добави ред в таблицата projects в Neon или в _data/projects.json." }}</p>
+{%- endif %}
+<ol class="project-list">
+  {%- for p in include.items %}
+  <li class="project">
+    <div class="project-head">
+      <{{ heading }}>{{ p.title }}</{{ heading }}>
+      <span class="year">{% if p.featured %}<span class="featured-mark">Избран </span>{% endif %}{{ p.year }}</span>
+    </div>
+    <p>{{ p.description }}</p>
+    {%- if p.tags.size > 0 %}
+    <ul class="tags">{% for t in p.tags %}<li><span>{{ t }}</span></li>{% endfor %}</ul>
+    {%- endif %}
+    {%- if p.gh %}{{ p.gh | repo_meta }}{% endif %}
+    {%- assign site_url = p.url | default: p.gh.homepage | default: p.gh.pages_url %}
+    <ul class="project-links">
+      {%- if p.repo %}<li><a href="https://github.com/{{ p.repo }}">Код в GitHub</a></li>{% endif %}
+      {%- if site_url %}<li><a href="{{ site_url }}">Отвори сайта</a></li>{% endif %}
+    </ul>
+  </li>
+  {%- endfor %}
+</ol>

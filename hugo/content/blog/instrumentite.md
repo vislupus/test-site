@@ -13,10 +13,11 @@ tags: [уеб, github]
 
 {{< repo "gohugoio/hugo" >}}
 
-Другите два кандидата, със същото съдържание:
+Другите три кандидата, със същото съдържание:
 
 {{< repo "withastro/astro" >}}
 {{< repo "11ty/eleventy" >}}
+{{< repo "jekyll/jekyll" >}}
 
 ## Библиотеките
 

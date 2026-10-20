@@ -1,0 +1,7 @@
+---
+layout: base
+---
+<h1 class="page-title">{{ page.title }}</h1>
+{%- assign n = page.posts.size %}
+<p class="page-intro">{% if n == 1 %}1 публикация{% else %}{{ n }} публикации{% endif %} с този етикет. <a href="{{ '/blog/' | relative_url }}">Всички публикации</a></p>
+{% include post-list.html posts=page.posts %}

@@ -3,9 +3,10 @@
 #   https://<потребител>.github.io/<repo>/astro/
 #   https://<потребител>.github.io/<repo>/eleventy/
 #   https://<потребител>.github.io/<repo>/hugo/
+#   https://<потребител>.github.io/<repo>/jekyll/
 # Settings → Pages → Source: „GitHub Actions“.
 # По желание: Settings → Secrets and variables → Actions → DATABASE_URL (connection string от Neon).
-name: Сравнение на трите генератора
+name: Сравнение на генераторите
 
 on:
   push:
@@ -27,7 +28,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
       - id: pages
@@ -39,6 +40,11 @@ jobs:
           cache-dependency-path: |
             astro/package-lock.json
             eleventy/package-lock.json
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          working-directory: jekyll
+          bundler-cache: true
       - name: Инсталиране на Hugo
         run: |
           curl -sSLo hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
@@ -48,9 +54,10 @@ jobs:
         run: |
           npm ci --prefix astro
           npm ci --prefix eleventy
-          command -v psql >/dev/null || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+          command -v psql >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client)
+          command -v convert >/dev/null || command -v magick >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends imagemagick)
 
-      - name: Билд на трите версии (с измерване на времето)
+      - name: Билд на четирите версии (с измерване на времето)
         env:
           # Имената са с PAGES_ нарочно: BASE_URL и SITE имат специално значение за Astro/Vite.
           PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
@@ -76,9 +83,14 @@ jobs:
           (cd hugo && bash scripts/fetch-neon.sh && hugo --gc --minify --baseURL "$PAGES_BASE_URL/hugo/")
           hugo_ms=$(( $(ms) - t ))
 
+          t=$(ms)
+          (cd jekyll && echo "url: $PAGES_ORIGIN" > _config.ci.yml && JEKYLL_ENV=production bundle exec jekyll build --config _config.yml,_config.ci.yml --baseurl "$PAGES_BASE_PATH/jekyll")
+          jekyll_ms=$(( $(ms) - t ))
+
           cp -r astro/dist out/astro
           cp -r eleventy/_site out/eleventy
           cp -r hugo/public out/hugo
+          cp -r jekyll/_site out/jekyll
           cp compare/index.html out/index.html
 
           size() { du -sk --apparent-size "$1" | cut -f1; }
@@ -89,7 +101,8 @@ jobs:
             "neon": $([[ -n "${DATABASE_URL:-}" ]] && echo true || echo false),
             "astro":    { "version": "$(node -p "require('./astro/node_modules/astro/package.json').version")", "ms": $astro_ms, "kb": $(size out/astro), "files": $(files out/astro) },
             "eleventy": { "version": "$(node -p "require('./eleventy/node_modules/@11ty/eleventy/package.json').version")", "ms": $eleventy_ms, "kb": $(size out/eleventy), "files": $(files out/eleventy) },
-            "hugo":     { "version": "$HUGO_VERSION", "ms": $hugo_ms, "kb": $(size out/hugo), "files": $(files out/hugo) }
+            "hugo":     { "version": "$HUGO_VERSION", "ms": $hugo_ms, "kb": $(size out/hugo), "files": $(files out/hugo) },
+            "jekyll":   { "version": "$(cd jekyll && bundle exec ruby -e 'require "jekyll"; print Jekyll::VERSION')", "ms": $jekyll_ms, "kb": $(size out/jekyll), "files": $(files out/jekyll) }
           }
           JSON
           cat out/stats.json
@@ -100,7 +113,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

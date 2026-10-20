@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Astro, Eleventy или Hugo</title>
-  <meta name="description" content="Един и същи сайт, направен с три генератора – за сравнение.">
+  <title>Astro, Eleventy, Hugo или Jekyll</title>
+  <meta name="description" content="Един и същи сайт, направен с четири генератора – за сравнение.">
   <link rel="icon" href="hugo/favicon.svg" type="image/svg+xml">
   <style>
     @font-face { font-family: "Sofia Sans"; font-weight: 100 900; font-display: swap; src: url(hugo/fonts/sofia-sans-cyrillic-wght-normal.woff2) format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
@@ -25,8 +25,8 @@
     :focus-visible { outline: 2px solid var(--lake); outline-offset: 3px; }
     h1 { font: 860 clamp(3rem, 9vw, 6.5rem)/0.88 "Sofia Sans Extra Condensed", "Sofia Sans", sans-serif; margin: 0 0 1.25rem; letter-spacing: -0.01em; }
     .intro { max-width: 46ch; color: var(--slate); font-size: 1.2rem; margin: 0 0 3rem; }
-    .versions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); border-top: 1px solid var(--rule); margin: 0; padding: 0; list-style: none; }
-    .versions > li { padding: 1.5rem 1.5rem 1.75rem 0; border-bottom: 1px solid var(--rule); }
+    .versions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15.5rem), 1fr)); border-top: 1px solid var(--rule); margin: 0; padding: 0; list-style: none; }
+    .versions > li { padding: 1.5rem 1.25rem 1.75rem 0; border-bottom: 1px solid var(--rule); }
     .versions h2 { font: 780 2.6rem/1 "Sofia Sans Extra Condensed", "Sofia Sans", sans-serif; margin: 0 0 0.35rem; }
     .versions h2 a { color: var(--ink); text-decoration: none; }
     .versions h2 a:hover { color: var(--lake); }
@@ -43,8 +43,8 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>Astro, Eleventy или Hugo</h1>
-    <p class="intro">Един и същи сайт, направен три пъти: блог в Markdown, формули, карти, карти на хранилища, проекти от Neon и галерия. Отвори ги един до друг и сравни.</p>
+    <h1>Astro, Eleventy, Hugo или Jekyll</h1>
+    <p class="intro">Един и същи сайт, направен четири пъти: блог в Markdown, формули, карти, карти на хранилища, проекти от Neon и галерия. Отвори ги един до друг и сравни.</p>
 
     <ul class="versions">
       <li>
@@ -78,6 +78,17 @@
           <li><a href="hugo/blog/sedemte-rilski-ezera/">Карти</a></li>
           <li><a href="hugo/projects/">Проекти</a></li>
           <li><a href="hugo/gallery/">Галерия</a></li>
+        </ul>
+      </li>
+      <li>
+        <h2><a href="jekyll/">Jekyll</a></h2>
+        <p class="what">Ruby и шаблони Liquid. Класиката на GitHub Pages, с плъгини на Ruby.</p>
+        <dl class="stats" data-gen="jekyll"></dl>
+        <ul class="pages">
+          <li><a href="jekyll/blog/formuli/">Формули</a></li>
+          <li><a href="jekyll/blog/sedemte-rilski-ezera/">Карти</a></li>
+          <li><a href="jekyll/projects/">Проекти</a></li>
+          <li><a href="jekyll/gallery/">Галерия</a></li>
         </ul>
       </li>
     </ul>

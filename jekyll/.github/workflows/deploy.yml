@@ -1,0 +1,57 @@
+# Публикува сайта в GitHub Pages при всеки push в main.
+# Settings → Pages → Source: „GitHub Actions“.
+# По желание: Settings → Secrets and variables → Actions → Secrets → DATABASE_URL (connection string от Neon).
+name: Публикуване (Jekyll)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Пресъздава сайта всеки ден, за да се обновят данните от Neon и GitHub.
+  schedule:
+    - cron: "17 4 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - id: pages
+        uses: actions/configure-pages@v6
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - name: ImageMagick (за галерията)
+        run: command -v convert >/dev/null || command -v magick >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends imagemagick)
+      - name: Билд
+        run: |
+          if [[ -z "${DATABASE_URL:-}" ]]; then echo "::notice::Няма secret DATABASE_URL – проектите идват от JSON файла. Добави го в Settings → Secrets and variables → Actions → Secrets."; fi
+          echo "url: ${{ steps.pages.outputs.origin }}" > _config.ci.yml
+          bundle exec jekyll build --config _config.yml,_config.ci.yml --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

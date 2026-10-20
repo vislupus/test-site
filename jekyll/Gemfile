@@ -1,0 +1,14 @@
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.4"
+
+# Плъгините в тази група се зареждат автоматично от Jekyll.
+group :jekyll_plugins do
+  # $$...$$ → KaTeX при билда (през ExecJS, нужен е Node.js). $...$ се превръща в $$...$$ от _plugins/math.rb.
+  gem "kramdown-math-katex", "~> 1.0"
+end
+
+gem "katex", "~> 0.11"
+
+# От Ruby 3.4 не е вграден, а Liquid го ползва.
+gem "bigdecimal"

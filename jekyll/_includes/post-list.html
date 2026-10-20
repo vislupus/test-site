@@ -1,0 +1,13 @@
+{%- assign lim = include.limit | default: 1000 %}
+<ol class="post-list">
+  {%- for post in include.posts limit: lim %}
+  <li class="post-item">
+    <time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date_short }}</time>
+    <div>
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <p>{{ post.description }}</p>
+      {% include tags.html tags=post.tags %}
+    </div>
+  </li>
+  {%- endfor %}
+</ol>
