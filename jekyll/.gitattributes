@@ -1,0 +1,4 @@
+# Скриптовете и workflow-ите винаги с LF, дори ако хранилището се клонира на Windows.
+* text=auto
+*.sh text eol=lf
+*.yml text eol=lf

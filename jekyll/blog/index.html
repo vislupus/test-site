@@ -1,0 +1,14 @@
+---
+title: Блог
+description: Всички публикации
+---
+<h1 class="page-title">Блог</h1>
+<p class="page-intro">Бележки за код, математика и разходки. Всяка публикация е Markdown файл в хранилището.</p>
+<ul class="tags tag-cloud" aria-label="Всички етикети">
+  {%- assign all_tags = site.tags | tag_list %}
+  {%- for t in all_tags %}
+  {%- capture href %}/tags/{{ t.slug }}/{% endcapture %}
+  <li><a href="{{ href | relative_url }}">{{ t.name }}<span class="count">{{ t.count }}</span></a></li>
+  {%- endfor %}
+</ul>
+{% include post-list.html posts=site.posts %}

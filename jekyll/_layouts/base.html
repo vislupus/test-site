@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title and page.url != "/" %}{{ page.title }} – {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <meta name="generator" content="Jekyll v{{ jekyll.version }}">
+  <link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ '/rss.xml' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/rouge.css' | relative_url }}">
+  {%- if content contains 'class="katex' %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{{ site.katex_version }}/dist/katex.min.css" crossorigin="anonymous">
+  {%- endif %}
+  {%- if content contains 'class="map"' %}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+  {%- endif %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Към съдържанието</a>
+  <div class="wrap">
+    <header class="site-header">
+      <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      <nav class="site-nav" aria-label="Основна навигация">
+        <ul>
+          {%- assign here = page.url %}
+          <li><a href="{{ '/blog/' | relative_url }}"{% if here contains '/blog/' or here contains '/tags/' %} aria-current="page"{% endif %}>Блог</a></li>
+          <li><a href="{{ '/projects/' | relative_url }}"{% if here == '/projects/' %} aria-current="page"{% endif %}>Проекти</a></li>
+          <li><a href="{{ '/gallery/' | relative_url }}"{% if here == '/gallery/' %} aria-current="page"{% endif %}>Галерия</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      {{ content }}
+    </main>
+    <footer class="site-footer">
+      <p>Генерирано с Jekyll {{ jekyll.version }} на {{ site.time | date_long }}</p>
+      <ul>
+        <li><a href="{{ '/rss.xml' | relative_url }}">RSS</a></li>
+        <li><a href="https://github.com/{{ site.github_user }}">GitHub</a></li>
+      </ul>
+    </footer>
+  </div>
+  {%- if content contains 'class="map"' %}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+  <script src="{{ '/assets/js/map.js' | relative_url }}"></script>
+  {%- endif %}
+  {%- if content contains 'data-lightbox' %}
+  <script src="{{ '/assets/js/lightbox.js' | relative_url }}"></script>
+  {%- endif %}
+</body>
+</html>

@@ -1,0 +1,16 @@
+{%- comment -%} Параметри: limit, strip (лента без надписи). Снимките идват от _plugins/images.rb. {%- endcomment -%}
+{%- assign lim = include.limit | default: 1000 %}
+<ul class="gallery{% if include.strip %} gallery-strip{% endif %}">
+  {%- for g in site.data.gallery_images limit: lim %}
+  <li>
+    <figure>
+      <a href="{{ g.full | relative_url }}" data-lightbox data-caption="{{ g.title | escape }}">
+        <img src="{{ g.small | relative_url }}" srcset="{{ g.small | relative_url }} 400w, {{ g.medium | relative_url }} 800w" sizes="(min-width: 72rem) 22rem, (min-width: 40rem) 45vw, 100vw" width="{{ g.width }}" height="{{ g.height }}" alt="{{ g.title | escape }}" loading="lazy" decoding="async">
+      </a>
+      {%- unless include.strip %}
+      <figcaption>{{ g.title }}</figcaption>
+      {%- endunless %}
+    </figure>
+  </li>
+  {%- endfor %}
+</ul>

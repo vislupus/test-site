@@ -1,0 +1,39 @@
+# Всичко, което трябва да смениш, за да стане сайтът твой, е тук.
+title: Бележник
+author: Твоето Име
+description: Бележки за код, математика и планини.
+lede: Бележки за код, математика и планини.
+lede_more: Тук събирам проекти, формули, маршрути и снимки.
+# Потребителско име в GitHub: страницата „Проекти“ показва последните ти публични хранилища.
+github_user: your-username
+
+# url и baseurl се подменят в GitHub Actions (идват от actions/configure-pages).
+url: https://your-username.github.io
+baseurl: ""
+lang: bg
+
+permalink: /blog/:title/
+timezone: Europe/Sofia
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  # KaTeX вместо MathJax (gem kramdown-math-katex).
+  math_engine: katex
+  syntax_highlighter: rouge
+
+defaults:
+  - scope: { path: "", type: posts }
+    values: { layout: post }
+  - scope: { path: "" }
+    values: { layout: base }
+
+# Снимките в _gallery/ и assets/blog/ се публикуват само преоразмерени (виж _plugins/images.rb).
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - neon/
+  - assets/blog/
+  - vendor/
+  - .github/

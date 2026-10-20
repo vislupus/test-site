@@ -1,0 +1,48 @@
+# Временен: билд на Jekyll версията без публикуване. Резултатът (и логът) отива в клон jekyll-build.
+name: Тест на Jekyll (временен)
+
+on:
+  push:
+    branches: [jekyll-wip]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          working-directory: jekyll
+          bundler-cache: true
+      - name: Билд
+        working-directory: jekyll
+        env:
+          JEKYLL_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          { ruby -v; bundle -v; node -v; command -v convert magick; bundle exec ruby -e 'require "katex"; puts "KaTeX #{Katex::KATEX_VERSION}"'; } > ../build.log 2>&1
+          echo "url: https://example.github.io" > _config.ci.yml
+          start=$(date +%s%3N)
+          bundle exec jekyll build --trace --config _config.yml,_config.ci.yml --baseurl /ssg/jekyll >> ../build.log 2>&1
+          code=$?
+          echo "build_ms=$(( $(date +%s%3N) - start )) exit=$code" >> ../build.log
+          start=$(date +%s%3N)
+          bundle exec jekyll build --config _config.yml,_config.ci.yml --baseurl /ssg/jekyll >> ../build.log 2>&1
+          echo "warm_build_ms=$(( $(date +%s%3N) - start ))" >> ../build.log
+          echo "BUILD_EXIT=$code" >> "$GITHUB_ENV"
+          tail -40 ../build.log
+      - name: Резултат в клон jekyll-build
+        run: |
+          mkdir -p /tmp/out && cp -r jekyll/_site /tmp/out/site 2>/dev/null || true
+          cp build.log jekyll/Gemfile.lock /tmp/out/ 2>/dev/null || true
+          cd /tmp/out && git init -q -b jekyll-build && git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -qm "Jekyll build ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" jekyll-build
+      - name: Статус
+        run: exit $BUILD_EXIT

@@ -1,0 +1,28 @@
+---
+title: Проекти
+description: Неща, които съм правил
+permalink: /projects/
+---
+<h1 class="page-title">Проекти</h1>
+<p class="page-intro">Неща, които съм правил – от хардуер до малки уеб приложения.</p>
+{% include project-list.html items=site.data.projects.items heading="h2" %}
+
+<h2 class="section-title">Последни хранилища в GitHub</h2>
+{%- assign gr = site.data.github_repos %}
+{%- if gr.configured != true %}
+<p class="notice">Задай <code>github_user</code> в <code>_config.yml</code> и тук ще се появят последните ти публични хранилища.</p>
+{%- elsif gr.repos == nil %}
+<p class="notice">GitHub API не отговори при последния билд. Хранилищата ще се появят при следващия.</p>
+{%- else %}
+<ul class="repo-grid">
+  {%- for r in gr.repos %}
+  <li>
+    <a class="name" href="{{ r.url }}">{{ r.name }}</a>
+    {% if r.description %}<p>{{ r.description }}</p>{% endif %}
+    {{ r | repo_meta }}
+    {% if r.pages_url %}<a href="{{ r.pages_url }}">Сайт в GitHub Pages</a>{% endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{%- endif %}
+<p class="data-source">{% if site.data.projects.source == "neon" %}Проектите са заредени от базата данни в Neon при билда.{% else %}Проектите са заредени от _data/projects.json (Neon не е свързан).{% endif %}</p>
