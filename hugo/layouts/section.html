@@ -1,0 +1,10 @@
+{{ define "main" }}
+<h1 class="page-title">{{ .Title }}</h1>
+<p class="page-intro">{{ .Description }}</p>
+<ul class="tags tag-cloud" aria-label="Всички етикети">
+  {{- range site.Taxonomies.tags.Alphabetical }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}<span class="count">{{ .Count }}</span></a></li>
+  {{- end }}
+</ul>
+{{ partial "post-list.html" .RegularPages }}
+{{ end }}

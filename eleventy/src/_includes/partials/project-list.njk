@@ -1,0 +1,21 @@
+{#- Очаква: items (масив от проекти), heading ("h2" или "h3") -#}
+<ol class="project-list">
+  {%- for p in items %}
+  <li class="project">
+    <div class="project-head">
+      <{{ heading }}>{{ p.title }}</{{ heading }}>
+      <span class="year">{% if p.featured %}<span class="featured-mark">Избран </span>{% endif %}{{ p.year }}</span>
+    </div>
+    <p>{{ p.description }}</p>
+    {%- if p.tags.length %}
+    <ul class="tags">{% for t in p.tags %}<li><span>{{ t }}</span></li>{% endfor %}</ul>
+    {%- endif %}
+    {%- if p.gh %}{{ p.gh | repoMeta | safe }}{% endif %}
+    {%- set siteUrl = p.url or (p.gh and p.gh.homepage) or (p.gh and p.gh.pagesUrl) %}
+    <ul class="project-links">
+      {%- if p.repo %}<li><a href="https://github.com/{{ p.repo }}">Код в GitHub</a></li>{% endif %}
+      {%- if siteUrl %}<li><a href="{{ siteUrl }}">Отвори сайта</a></li>{% endif %}
+    </ul>
+  </li>
+  {%- endfor %}
+</ol>

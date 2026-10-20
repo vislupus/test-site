@@ -1,0 +1,5 @@
+{{ define "main" }}
+<h1 class="page-title">{{ .Title }}</h1>
+<p class="page-intro">{{ .Description }}</p>
+{{ partial "gallery-grid.html" (dict "page" . "strip" false) }}
+{{ end }}

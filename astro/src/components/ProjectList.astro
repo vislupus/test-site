@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getRepo } from "../lib/github";
+import RepoMeta from "./RepoMeta.astro";
+interface Props { projects: CollectionEntry<"projects">[]; heading?: "h2" | "h3" }
+const { projects, heading: H = "h2" } = Astro.props;
+// Обогатяваме проектите с данни от GitHub (звезди, език, последна промяна).
+const items = await Promise.all(
+  projects.map(async (p) => ({ ...p.data, gh: p.data.repo ? await getRepo(p.data.repo) : null }))
+);
+---
+<ol class="project-list">
+  {items.map((p) => (
+    <li class="project">
+      <div class="project-head">
+        <H>{p.title}</H>
+        <span class="year">{p.featured && <span class="featured-mark">Избран </span>}{p.year}</span>
+      </div>
+      <p>{p.description}</p>
+      {p.tags.length > 0 && <ul class="tags">{p.tags.map((t) => <li><span>{t}</span></li>)}</ul>}
+      {p.gh && <RepoMeta repo={p.gh} />}
+      <ul class="project-links">
+        {p.repo && <li><a href={`https://github.com/${p.repo}`}>Код в GitHub</a></li>}
+        {(p.url ?? p.gh?.homepage ?? p.gh?.pagesUrl) && <li><a href={p.url ?? p.gh?.homepage ?? p.gh?.pagesUrl}>Отвори сайта</a></li>}
+      </ul>
+    </li>
+  ))}
+</ol>

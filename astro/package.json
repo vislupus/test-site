@@ -1,0 +1,20 @@
+{
+  "name": "site-astro",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.4",
+    "@astrojs/mdx": "^8.1.0",
+    "@astrojs/rss": "^4.0.19",
+    "@neondatabase/serverless": "^1.2.0",
+    "astro": "^7.4.0",
+    "katex": "^0.19.0",
+    "leaflet": "^1.9.4",
+    "satteri": "^0.10.5"
+  }
+}

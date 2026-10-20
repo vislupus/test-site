@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ProjectList from "../components/ProjectList.astro";
+import RepoMeta from "../components/RepoMeta.astro";
+import { getUserRepos } from "../lib/github";
+import { SITE } from "../site.config";
+
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
+const source = projects[0]?.data.source ?? "local";
+const configured = SITE.githubUser !== "your-username";
+const repos = configured ? await getUserRepos(SITE.githubUser) : null;
+---
+<Base title="Проекти" description="Неща, които съм правил">
+  <h1 class="page-title">Проекти</h1>
+  <p class="page-intro">Неща, които съм правил – от хардуер до малки уеб приложения.</p>
+  <ProjectList projects={projects} />
+
+  <h2 class="section-title">Последни хранилища в GitHub</h2>
+  {!configured && (
+    <p class="notice">Задай <code>githubUser</code> в <code>src/site.config.ts</code> и тук ще се появят последните ти публични хранилища.</p>
+  )}
+  {configured && !repos && <p class="notice">GitHub API не отговори при последния билд. Хранилищата ще се появят при следващия.</p>}
+  {repos && (
+    <ul class="repo-grid">
+      {repos.map((r) => (
+        <li>
+          <a class="name" href={r.url}>{r.fullName.split("/")[1]}</a>
+          {r.description && <p>{r.description}</p>}
+          <RepoMeta repo={r} />
+          {r.pagesUrl && <a href={r.pagesUrl}>Сайт в GitHub Pages</a>}
+        </li>
+      ))}
+    </ul>
+  )}
+  <p class="data-source">
+    {source === "neon" ? "Проектите са заредени от базата данни в Neon при билда." : "Проектите са заредени от src/data/projects.json (Neon не е свързан)."}
+  </p>
+</Base>

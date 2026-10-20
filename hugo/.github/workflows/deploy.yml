@@ -1,0 +1,61 @@
+# Публикува сайта в GitHub Pages при всеки push в main.
+# Settings → Pages → Source: „GitHub Actions“.
+# По желание: Settings → Secrets and variables → Actions → DATABASE_URL (connection string от Neon).
+name: Публикуване (Hugo)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Пресъздава сайта всеки ден, за да се обновят данните от Neon и GitHub.
+  schedule:
+    - cron: "17 4 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: 0.167.0
+  TZ: Europe/Sofia
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - id: pages
+        uses: actions/configure-pages@v6
+      - name: Инсталиране на Hugo
+        run: |
+          curl -sSLo hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          mkdir -p "$HOME/.local/hugo" && tar -xzf hugo.tar.gz -C "$HOME/.local/hugo" && rm hugo.tar.gz
+          echo "$HOME/.local/hugo" >> "$GITHUB_PATH"
+      - name: Проекти от Neon
+        run: |
+          command -v psql >/dev/null || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+          ./scripts/fetch-neon.sh
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - name: Билд
+        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

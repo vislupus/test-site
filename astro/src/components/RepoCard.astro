@@ -1,0 +1,20 @@
+---
+// Карта на хранилище в GitHub. Данните се взимат при билда; ако API-то не отговори,
+// остава само връзката. Употреба в .mdx: <RepoCard repo="withastro/astro" />
+import { getRepo } from "../lib/github";
+import RepoMeta from "./RepoMeta.astro";
+interface Props { repo: string }
+const { repo: fullName } = Astro.props;
+const repo = await getRepo(fullName);
+---
+{repo ? (
+  <aside class="repo-card">
+    <a class="repo-name" href={repo.url}>{repo.fullName}</a>
+    {repo.description && <p class="repo-desc">{repo.description}</p>}
+    <RepoMeta repo={repo} />
+  </aside>
+) : (
+  <aside class="repo-card is-offline">
+    <a class="repo-name" href={`https://github.com/${fullName}`}>{fullName}</a>
+  </aside>
+)}

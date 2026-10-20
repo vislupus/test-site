@@ -1,0 +1,7 @@
+{%- if tags and tags.length %}
+<ul class="tags" aria-label="Етикети">
+  {%- for t in tags %}
+  <li><a href="/tags/{{ t | slugify }}/">{{ t }}</a></li>
+  {%- endfor %}
+</ul>
+{%- endif %}

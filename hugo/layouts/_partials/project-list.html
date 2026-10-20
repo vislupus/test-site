@@ -1,0 +1,21 @@
+{{- $heading := .heading -}}
+<ol class="project-list">
+  {{- range .items }}
+  <li class="project">
+    <div class="project-head">
+      {{ printf "<%s>%s</%s>" $heading (.title | htmlEscape) $heading | safeHTML }}
+      <span class="year">{{ if .featured }}<span class="featured-mark">Избран </span>{{ end }}{{ .year }}</span>
+    </div>
+    <p>{{ .description }}</p>
+    {{- with .tags }}
+    <ul class="tags">{{ range . }}<li><span>{{ . }}</span></li>{{ end }}</ul>
+    {{- end }}
+    {{- with .gh }}{{ partial "repo-meta.html" . }}{{ end }}
+    {{- $siteUrl := or .url (and .gh .gh.homepage) (and .gh .gh.pagesUrl) }}
+    <ul class="project-links">
+      {{- with .repo }}<li><a href="https://github.com/{{ . }}">Код в GitHub</a></li>{{ end }}
+      {{- with $siteUrl }}<li><a href="{{ . }}">Отвори сайта</a></li>{{ end }}
+    </ul>
+  </li>
+  {{- end }}
+</ol>

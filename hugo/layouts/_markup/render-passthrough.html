@@ -1,0 +1,10 @@
+{{- /* $...$ и $$...$$ → HTML с KaTeX при билда (transform.ToMath, без JavaScript в браузъра). */ -}}
+{{- $opts := dict "output" "htmlAndMathml" "displayMode" (eq .Type "block") "throwOnError" false -}}
+{{- with try (transform.ToMath .Inner $opts) -}}
+  {{- with .Err -}}
+    {{- errorf "Формулата в %s не може да се рендира: %s" $.Position . -}}
+  {{- else -}}
+    {{- .Value -}}
+    {{- $.Page.Store.Set "hasMath" true -}}
+  {{- end -}}
+{{- end -}}

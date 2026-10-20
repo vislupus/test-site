@@ -1,0 +1,26 @@
+{{- /* Снимките са в content/gallery/ (page bundle); заглавията – в front matter-а там. Hugo ги преоразмерява при билда. */ -}}
+{{- $gallery := site.GetPage "/gallery" -}}
+{{- $list := $gallery.Params.resources -}}
+{{- with .limit }}{{ $list = first . $list }}{{ end -}}
+{{- $strip := .strip -}}
+{{- .page.Store.Set "hasGallery" true -}}
+<ul class="gallery{{ if $strip }} gallery-strip{{ end }}">
+  {{- range $list }}
+  {{- with $gallery.Resources.Get .src }}
+  {{- $title := .Title }}
+  {{- $small := .Resize "400x webp" }}
+  {{- $medium := .Resize "800x webp" }}
+  {{- $full := .Fit "1600x1600 webp" }}
+  <li>
+    <figure>
+      <a href="{{ $full.RelPermalink }}" data-lightbox data-caption="{{ $title }}">
+        <img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 400w, {{ $medium.RelPermalink }} 800w" sizes="(min-width: 72rem) 22rem, (min-width: 40rem) 45vw, 100vw" width="{{ $small.Width }}" height="{{ $small.Height }}" alt="{{ $title }}" loading="lazy" decoding="async">
+      </a>
+      {{- if not $strip }}
+      <figcaption>{{ $title }}</figcaption>
+      {{- end }}
+    </figure>
+  </li>
+  {{- end }}
+  {{- end }}
+</ul>

@@ -1,0 +1,10 @@
+---
+import { tagPath } from "../lib/format";
+interface Props { tags: string[] }
+const { tags } = Astro.props;
+---
+{tags.length > 0 && (
+  <ul class="tags" aria-label="Етикети">
+    {tags.map((t) => <li><a href={tagPath(t)}>{t}</a></li>)}
+  </ul>
+)}

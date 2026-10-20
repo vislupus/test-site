@@ -1,0 +1,27 @@
+{{- /* RSS само с публикациите от блога. */ -}}
+{{- $pages := first 20 (where site.RegularPages "Section" "blog") -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ site.Title }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ site.Params.description }}</description>
+    <language>bg</language>
+    {{- with $pages }}<lastBuildDate>{{ (index . 0).Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
+    {{- with .OutputFormats.Get "rss" }}
+    {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
+    {{- end }}
+    {{- range $pages }}
+    <item>
+      <title>{{ .Title }}</title>
+      <link>{{ .Permalink }}</link>
+      <guid>{{ .Permalink }}</guid>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      <description>{{ .Description }}</description>
+      {{- range .Params.tags }}
+      <category>{{ . }}</category>
+      {{- end }}
+    </item>
+    {{- end }}
+  </channel>
+</rss>

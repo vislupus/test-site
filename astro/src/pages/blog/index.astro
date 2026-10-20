@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import PostList from "../../components/PostList.astro";
+import { tagPath } from "../../lib/format";
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+const counts = new Map<string, number>();
+posts.flatMap((p) => p.data.tags).forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1));
+const tags = [...counts].sort((a, b) => a[0].localeCompare(b[0], "bg"));
+---
+<Base title="Блог" description="Всички публикации">
+  <h1 class="page-title">Блог</h1>
+  <p class="page-intro">Бележки за код, математика и разходки. Всяка публикация е Markdown файл в хранилището.</p>
+  <ul class="tags tag-cloud" aria-label="Всички етикети">
+    {tags.map(([t, n]) => <li><a href={tagPath(t)}>{t}<span class="count">{n}</span></a></li>)}
+  </ul>
+  <PostList posts={posts} />
+</Base>

@@ -1,0 +1,21 @@
+---
+layout: layouts/base.njk
+---
+<section class="hero">
+  <h1>{{ site.title }}</h1>
+  <p class="lede">{{ site.lede }}<span>{{ site.ledeMore }}</span></p>
+</section>
+
+<h2 class="section-title">Последни публикации</h2>
+{% set posts = collections.posts.slice(0, 3) %}
+{% include "partials/post-list.njk" %}
+<p><a class="more" href="/blog/">Всички публикации</a></p>
+
+<h2 class="section-title">Избрани проекти</h2>
+{% set items = projects.featured %}{% set heading = "h3" %}
+{% include "partials/project-list.njk" %}
+<p><a class="more" href="/projects/">Всички проекти</a></p>
+
+<h2 class="section-title">От галерията</h2>
+{% gallery { limit: 4, strip: true } %}
+<p><a class="more" href="/gallery/">Цялата галерия</a></p>

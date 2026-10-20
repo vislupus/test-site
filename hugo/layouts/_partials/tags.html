@@ -1,0 +1,7 @@
+{{- with .GetTerms "tags" }}
+<ul class="tags" aria-label="Етикети">
+  {{- range . }}
+  <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+  {{- end }}
+</ul>
+{{- end }}

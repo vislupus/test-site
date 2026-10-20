@@ -1,0 +1,47 @@
+---
+// Карта с Leaflet + OpenStreetMap. Скриптът и CSS-ът се включват само на страници, които я ползват.
+// Употреба в .mdx:
+// <Map lat={42.2} lng={23.3} zoom={13} markers={[{ lat: 42.2, lng: 23.3, label: "Хижа" }]} route caption="..." />
+interface Marker { lat: number; lng: number; label?: string }
+interface Props {
+  lat: number;
+  lng: number;
+  zoom?: number;
+  markers?: Marker[];
+  /** Свързва маркерите с пунктир (маршрут). */
+  route?: boolean;
+  /** Мащабира картата така, че да се виждат всички маркери. */
+  fit?: boolean;
+  caption?: string;
+  height?: string;
+}
+const { lat, lng, zoom = 12, markers = [], route = false, fit = false, caption, height } = Astro.props;
+// CSS-ът на Leaflet като отделен файл: <link> се появява само там, където има карта.
+import leafletCss from "leaflet/dist/leaflet.css?url";
+const osm = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=${zoom}/${lat}/${lng}`;
+---
+<link rel="stylesheet" href={leafletCss} />
+<figure class="map-figure">
+  <div
+    class="map"
+    role="region"
+    aria-label={caption ? `Карта: ${caption}` : "Карта"}
+    data-lat={lat}
+    data-lng={lng}
+    data-zoom={zoom}
+    data-markers={JSON.stringify(markers)}
+    data-route={String(route)}
+    data-fit={String(fit)}
+    style={height ? `height: ${height}` : undefined}
+  ></div>
+  <figcaption>
+    {caption && <span>{caption}</span>}
+    <a href={osm}>Отвори в OpenStreetMap</a>
+  </figcaption>
+</figure>
+
+<script>
+  import L from "leaflet";
+  import { initMaps } from "../scripts/map-init.js";
+  initMaps(L);
+</script>

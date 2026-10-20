@@ -1,0 +1,19 @@
+{{ define "main" }}
+<section class="hero">
+  <h1>{{ site.Title }}</h1>
+  <p class="lede">{{ site.Params.lede }}<span>{{ site.Params.ledeMore }}</span></p>
+</section>
+
+<h2 class="section-title">Последни публикации</h2>
+{{ partial "post-list.html" (first 3 (where site.RegularPages "Section" "blog")) }}
+<p><a class="more" href="{{ "blog/" | relURL }}">Всички публикации</a></p>
+
+<h2 class="section-title">Избрани проекти</h2>
+{{ $projects := partial "projects.html" . }}
+{{ partial "project-list.html" (dict "items" (where $projects.items "featured" true) "heading" "h3") }}
+<p><a class="more" href="{{ "projects/" | relURL }}">Всички проекти</a></p>
+
+<h2 class="section-title">От галерията</h2>
+{{ partial "gallery-grid.html" (dict "page" . "limit" 4 "strip" true) }}
+<p><a class="more" href="{{ "gallery/" | relURL }}">Цялата галерия</a></p>
+{{ end }}

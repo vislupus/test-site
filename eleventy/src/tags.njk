@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: collections.tagList
+  size: 1
+  alias: tag
+permalink: "/tags/{{ tag.name | slugify }}/"
+eleventyComputed:
+  title: "#{{ tag.name }}"
+  description: "Публикации с етикет {{ tag.name }}"
+---
+<h1 class="page-title">#{{ tag.name }}</h1>
+{% set posts = collections.posts | withTag(tag.name) %}
+<p class="page-intro">{% if posts.length == 1 %}1 публикация{% else %}{{ posts.length }} публикации{% endif %} с този етикет. <a href="/blog/">Всички публикации</a></p>
+{% include "partials/post-list.njk" %}

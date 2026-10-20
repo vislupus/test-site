@@ -1,0 +1,8 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/format";
+---
+<Base title="Няма такава страница">
+  <h1 class="page-title">Няма такава страница</h1>
+  <p class="page-intro">Адресът може да е стар или с грешка. Започни от <a href={url()}>началото</a> или виж <a href={url("blog/")}>всички публикации</a>.</p>
+</Base>

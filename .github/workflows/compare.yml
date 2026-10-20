@@ -1,0 +1,108 @@
+# Билдва трите версии и ги публикува заедно в GitHub Pages:
+#   https://<потребител>.github.io/<repo>/           – страница за сравнение
+#   https://<потребител>.github.io/<repo>/astro/
+#   https://<потребител>.github.io/<repo>/eleventy/
+#   https://<потребител>.github.io/<repo>/hugo/
+# Settings → Pages → Source: „GitHub Actions“.
+# По желание: Settings → Secrets and variables → Actions → DATABASE_URL (connection string от Neon).
+name: Сравнение на трите генератора
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: 0.167.0
+  TZ: Europe/Sofia
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - id: pages
+        uses: actions/configure-pages@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            astro/package-lock.json
+            eleventy/package-lock.json
+      - name: Инсталиране на Hugo
+        run: |
+          curl -sSLo hugo.tar.gz "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz"
+          mkdir -p "$HOME/.local/hugo" && tar -xzf hugo.tar.gz -C "$HOME/.local/hugo" && rm hugo.tar.gz
+          echo "$HOME/.local/hugo" >> "$GITHUB_PATH"
+      - name: Зависимости
+        run: |
+          npm ci --prefix astro
+          npm ci --prefix eleventy
+          command -v psql >/dev/null || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+
+      - name: Билд на трите версии (с измерване на времето)
+        env:
+          # Имената са с PAGES_ нарочно: BASE_URL и SITE имат специално значение за Astro/Vite.
+          PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          ms() { date +%s%3N; }
+
+          t=$(ms)
+          (cd astro && SITE_URL="$PAGES_ORIGIN" BASE_PATH="$PAGES_BASE_PATH/astro/" npm run build)
+          astro_ms=$(( $(ms) - t ))
+
+          t=$(ms)
+          (cd eleventy && SITE_URL="$PAGES_ORIGIN" PATH_PREFIX="$PAGES_BASE_PATH/eleventy/" npm run build)
+          eleventy_ms=$(( $(ms) - t ))
+
+          t=$(ms)
+          (cd hugo && ./scripts/fetch-neon.sh && hugo --gc --minify --baseURL "$PAGES_BASE_URL/hugo/")
+          hugo_ms=$(( $(ms) - t ))
+
+          cp -r astro/dist out/astro
+          cp -r eleventy/_site out/eleventy
+          cp -r hugo/public out/hugo
+          cp compare/index.html out/index.html
+
+          size() { du -sk --apparent-size "$1" | cut -f1; }
+          files() { find "$1" -type f | wc -l; }
+          cat > out/stats.json <<JSON
+          {
+            "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "neon": $([[ -n "${DATABASE_URL:-}" ]] && echo true || echo false),
+            "astro":    { "version": "$(node -p "require('./astro/node_modules/astro/package.json').version")", "ms": $astro_ms, "kb": $(size out/astro), "files": $(files out/astro) },
+            "eleventy": { "version": "$(node -p "require('./eleventy/node_modules/@11ty/eleventy/package.json').version")", "ms": $eleventy_ms, "kb": $(size out/eleventy), "files": $(files out/eleventy) },
+            "hugo":     { "version": "$HUGO_VERSION", "ms": $hugo_ms, "kb": $(size out/hugo), "files": $(files out/hugo) }
+          }
+          JSON
+          cat out/stats.json
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

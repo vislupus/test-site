@@ -1,0 +1,51 @@
+# baseURL се подменя в GitHub Actions с --baseURL (идва от actions/configure-pages).
+baseURL = "https://your-username.github.io/"
+title = "Бележник"
+locale = "bg-BG"
+defaultContentLanguage = "bg"
+# Етикетите остават с малки букви, както са написани.
+capitalizeListTitles = false
+
+[params]
+  author = "Твоето Име"
+  description = "Бележки за код, математика и планини."
+  lede = "Бележки за код, математика и планини."
+  ledeMore = "Тук събирам проекти, формули, маршрути и снимки."
+  # Потребителско име в GitHub: страницата „Проекти“ показва последните ти публични хранилища.
+  githubUser = "your-username"
+
+[taxonomies]
+  tag = "tags"
+
+# RSS само за началната страница, на адрес /rss.xml (както в другите две версии).
+[outputs]
+  home = ["html", "rss"]
+  section = ["html"]
+  taxonomy = ["html"]
+  term = ["html"]
+[outputFormats.rss]
+  baseName = "rss"
+
+[markup]
+  [markup.goldmark.extensions.passthrough]
+    # $...$ и $$...$$ стигат непокътнати до render-passthrough.html, където KaTeX ги рендира.
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [["$$", "$$"]]
+      inline = [["$", "$"]]
+  [markup.highlight]
+    noClasses = false
+
+[imaging]
+  [imaging.webp]
+    quality = 80
+  [imaging.jpeg]
+    quality = 80
+
+# GitHub API: кешът на resources.GetRemote живее 1 час при локална работа.
+[caches.getresource]
+  maxAge = "1h"
+
+# Разрешаваме на шаблоните да четат GITHUB_TOKEN и GITHUB_API_URL.
+[security.funcs]
+  getenv = ["^HUGO_", "^CI$", "^GITHUB_"]

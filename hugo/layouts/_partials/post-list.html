@@ -1,0 +1,12 @@
+<ol class="post-list">
+  {{- range . }}
+  <li class="post-item">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-short.html" .Date }}</time>
+    <div>
+      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+      <p>{{ .Description }}</p>
+      {{ partial "tags.html" . }}
+    </div>
+  </li>
+  {{- end }}
+</ol>

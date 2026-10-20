@@ -1,0 +1,14 @@
+{{- /* GET към GitHub API по време на билда. Връща разчетения JSON или false. */ -}}
+{{- $api := strings.TrimSuffix "/" (or (os.Getenv "GITHUB_API_URL") "https://api.github.com") -}}
+{{- $headers := dict "Accept" "application/vnd.github+json" "X-GitHub-Api-Version" "2022-11-28" "User-Agent" "hugo-site-build" -}}
+{{- with os.Getenv "GITHUB_TOKEN" }}{{ $headers = merge $headers (dict "Authorization" (printf "Bearer %s" .)) }}{{ end -}}
+{{- $result := false -}}
+{{- $url := printf "%s%s" $api . -}}
+{{- with try (resources.GetRemote $url (dict "headers" $headers)) -}}
+  {{- with .Err -}}
+    {{- warnf "[github] Не успях да заредя %s" $url -}}
+  {{- else with .Value -}}
+    {{- $result = . | transform.Unmarshal -}}
+  {{- end -}}
+{{- end -}}
+{{- return $result -}}

@@ -1,0 +1,11 @@
+{{- /* Снимките до публикацията (page bundle) стават WebP в два размера. Външните остават както са. */ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $img := false -}}
+{{- if not $u.IsAbs }}{{ $img = .Page.Resources.Get (strings.TrimPrefix "./" $u.Path) }}{{ end -}}
+{{- with $img -}}
+  {{- $small := .Resize "800x webp" -}}
+  {{- $large := .Resize "1400x webp" -}}
+  <img src="{{ $small.RelPermalink }}" srcset="{{ $small.RelPermalink }} 800w, {{ $large.RelPermalink }} 1400w" sizes="(min-width: 48rem) 44rem, 100vw" width="{{ $large.Width }}" height="{{ $large.Height }}" alt="{{ $.PlainText }}" loading="lazy" decoding="async">
+{{- else -}}
+  <img src="{{ .Destination | safeURL }}" alt="{{ .PlainText }}" loading="lazy" decoding="async">
+{{- end -}}

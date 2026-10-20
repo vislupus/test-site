@@ -1,0 +1,59 @@
+{%- set hasMath = content | includes('class="katex') -%}
+{%- set hasMap = content | includes('class="map"') -%}
+{%- set hasLightbox = content | includes('data-lightbox') -%}
+<!doctype html>
+<html lang="bg">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if title %}{{ title }} – {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ description or site.description }}">
+    <meta name="generator" content="{{ eleventy.generator }}">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="canonical" href="{{ page.url | htmlBaseUrl(site.url) }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="/rss.xml">
+    <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/prism.css">
+    {%- if hasMath %}
+    <link rel="stylesheet" href="/assets/vendor/katex/katex.min.css">
+    {%- endif %}
+    {%- if hasMap %}
+    <link rel="stylesheet" href="/assets/vendor/leaflet/leaflet.css">
+    {%- endif %}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Към съдържанието</a>
+    <div class="wrap">
+      <header class="site-header">
+        <a class="brand" href="/">{{ site.title }}</a>
+        <nav class="site-nav" aria-label="Основна навигация">
+          <ul>
+            {%- set nav = [["/blog/", "Блог", ["/blog/", "/tags/"]], ["/projects/", "Проекти", ["/projects/"]], ["/gallery/", "Галерия", ["/gallery/"]]] %}
+            {%- for item in nav %}
+            {%- set current = false %}
+            {%- for m in item[2] %}{% if page.url.startsWith(m) %}{% set current = true %}{% endif %}{% endfor %}
+            <li><a href="{{ item[0] }}"{% if current %} aria-current="page"{% endif %}>{{ item[1] }}</a></li>
+            {%- endfor %}
+          </ul>
+        </nav>
+      </header>
+      <main id="main">
+        {{ content | safe }}
+      </main>
+      <footer class="site-footer">
+        <p>Генерирано с Eleventy {{ eleventy.version }} на {{ site.builtAt | dateLong }}</p>
+        <ul>
+          <li><a href="/rss.xml">RSS</a></li>
+          <li><a href="https://github.com/{{ site.githubUser }}">GitHub</a></li>
+        </ul>
+      </footer>
+    </div>
+    {%- if hasMap %}
+    <script src="/assets/vendor/leaflet/leaflet.js"></script>
+    <script src="/assets/js/map.js"></script>
+    {%- endif %}
+    {%- if hasLightbox %}
+    <script src="/assets/js/lightbox.js"></script>
+    {%- endif %}
+  </body>
+</html>

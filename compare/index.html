@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Astro, Eleventy или Hugo</title>
+  <meta name="description" content="Един и същи сайт, направен с три генератора – за сравнение.">
+  <link rel="icon" href="hugo/favicon.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: "Sofia Sans"; font-weight: 100 900; font-display: swap; src: url(hugo/fonts/sofia-sans-cyrillic-wght-normal.woff2) format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "Sofia Sans"; font-weight: 100 900; font-display: swap; src: url(hugo/fonts/sofia-sans-latin-wght-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "Sofia Sans Extra Condensed"; font-weight: 100 900; font-display: swap; src: url(hugo/fonts/sofia-sans-extra-condensed-cyrillic-wght-normal.woff2) format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "Sofia Sans Extra Condensed"; font-weight: 100 900; font-display: swap; src: url(hugo/fonts/sofia-sans-extra-condensed-latin-wght-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    :root {
+      color-scheme: light dark;
+      --paper: #f2f4f1; --paper-2: #e6ebe7; --ink: #17232b; --slate: #55636b; --rule: #d2dad4; --forest: #2a6a4c; --lake: #1d5f9f;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --paper: #0f171b; --paper-2: #172227; --ink: #e1e7e3; --slate: #98a59f; --rule: #26343b; --forest: #74c79f; --lake: #85b9ec; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1.1rem/1.6 "Sofia Sans", system-ui, sans-serif; }
+    .wrap { max-width: 72rem; margin: 0 auto; padding: clamp(2rem, 6vw, 4.5rem) clamp(1rem, 4vw, 2.5rem) 4rem; }
+    a { color: var(--lake); text-underline-offset: 0.18em; }
+    :focus-visible { outline: 2px solid var(--lake); outline-offset: 3px; }
+    h1 { font: 860 clamp(3rem, 9vw, 6.5rem)/0.88 "Sofia Sans Extra Condensed", "Sofia Sans", sans-serif; margin: 0 0 1.25rem; letter-spacing: -0.01em; }
+    .intro { max-width: 46ch; color: var(--slate); font-size: 1.2rem; margin: 0 0 3rem; }
+    .versions { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); border-top: 1px solid var(--rule); margin: 0; padding: 0; list-style: none; }
+    .versions > li { padding: 1.5rem 1.5rem 1.75rem 0; border-bottom: 1px solid var(--rule); }
+    .versions h2 { font: 780 2.6rem/1 "Sofia Sans Extra Condensed", "Sofia Sans", sans-serif; margin: 0 0 0.35rem; }
+    .versions h2 a { color: var(--ink); text-decoration: none; }
+    .versions h2 a:hover { color: var(--lake); }
+    .versions .what { color: var(--slate); margin: 0 0 1rem; max-width: 34ch; }
+    .stats { display: grid; grid-template-columns: auto 1fr; gap: 0.15rem 1rem; margin: 0 0 1rem; font-variant-numeric: tabular-nums; }
+    .stats dt { color: var(--slate); }
+    .stats dd { margin: 0; font-weight: 600; }
+    .pages { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.2rem 1rem; }
+    h3 { font: 750 1.9rem/1 "Sofia Sans Extra Condensed", "Sofia Sans", sans-serif; margin: 3.5rem 0 1rem; }
+    .checklist { max-width: 62ch; padding-left: 1.2rem; }
+    .checklist li + li { margin-top: 0.4rem; }
+    .meta { color: var(--slate); font-size: 0.95rem; margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Astro, Eleventy или Hugo</h1>
+    <p class="intro">Един и същи сайт, направен три пъти: блог в Markdown, формули, карти, карти на хранилища, проекти от Neon и галерия. Отвори ги един до друг и сравни.</p>
+
+    <ul class="versions">
+      <li>
+        <h2><a href="astro/">Astro</a></h2>
+        <p class="what">Компоненти и TypeScript. Публикациите могат да са MDX с вградени компоненти.</p>
+        <dl class="stats" data-gen="astro"></dl>
+        <ul class="pages">
+          <li><a href="astro/blog/formuli/">Формули</a></li>
+          <li><a href="astro/blog/sedemte-rilski-ezera/">Карти</a></li>
+          <li><a href="astro/projects/">Проекти</a></li>
+          <li><a href="astro/gallery/">Галерия</a></li>
+        </ul>
+      </li>
+      <li>
+        <h2><a href="eleventy/">Eleventy</a></h2>
+        <p class="what">Шаблони Nunjucks и обикновен JavaScript. Shortcode-ове в Markdown.</p>
+        <dl class="stats" data-gen="eleventy"></dl>
+        <ul class="pages">
+          <li><a href="eleventy/blog/formuli/">Формули</a></li>
+          <li><a href="eleventy/blog/sedemte-rilski-ezera/">Карти</a></li>
+          <li><a href="eleventy/projects/">Проекти</a></li>
+          <li><a href="eleventy/gallery/">Галерия</a></li>
+        </ul>
+      </li>
+      <li>
+        <h2><a href="hugo/">Hugo</a></h2>
+        <p class="what">Един изпълним файл, шаблони на Go. Без Node.js и без node_modules.</p>
+        <dl class="stats" data-gen="hugo"></dl>
+        <ul class="pages">
+          <li><a href="hugo/blog/formuli/">Формули</a></li>
+          <li><a href="hugo/blog/sedemte-rilski-ezera/">Карти</a></li>
+          <li><a href="hugo/projects/">Проекти</a></li>
+          <li><a href="hugo/gallery/">Галерия</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Какво да пробваш</h3>
+    <ol class="checklist">
+      <li>Добави нова публикация с формула и карта във всяка версия. Кой синтаксис ти е най-приятен за писане?</li>
+      <li>Смени нещо в дизайна, например шаблона на статия. Къде намираш файла най-бързо?</li>
+      <li>Добави снимка в галерията и проект в Neon, после пусни нов билд.</li>
+      <li>Пусни <code>dev</code> сървъра локално и виж колко бързо се обновява страницата при промяна.</li>
+    </ol>
+
+    <p class="meta" id="meta">Времената за билд се появяват след първото публикуване през GitHub Actions.</p>
+  </div>
+  <script>
+    fetch("stats.json")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((s) => {
+        const kb = (n) => (n >= 1024 ? (n / 1024).toFixed(1).replace(".", ",") + " MB" : n + " KB");
+        const sec = (ms) => (ms / 1000).toFixed(1).replace(".", ",") + " с";
+        for (const dl of document.querySelectorAll("[data-gen]")) {
+          const g = s[dl.dataset.gen];
+          if (!g) continue;
+          dl.innerHTML =
+            `<dt>Версия</dt><dd>${g.version}</dd>` +
+            `<dt>Билд в CI</dt><dd>${sec(g.ms)}</dd>` +
+            `<dt>Размер</dt><dd>${kb(g.kb)}, ${g.files} файла</dd>`;
+        }
+        const when = new Date(s.builtAt).toLocaleString("bg-BG", { dateStyle: "long", timeStyle: "short" });
+        document.getElementById("meta").textContent =
+          `Последен билд: ${when}. Проектите са ${s.neon ? "заредени от Neon" : "от локалния JSON (Neon не е свързан)"}. Времето включва и заявките към GitHub API.`;
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{{- $colors := dict "JavaScript" "#f1e05a" "TypeScript" "#3178c6" "Python" "#3572A5" "Go" "#00ADD8" "Rust" "#dea584" "C++" "#f34b7d" "C" "#555555" "HTML" "#e34c26" "CSS" "#663399" "Astro" "#ff5a03" "Java" "#b07219" "Shell" "#89e051" "Vue" "#41b883" "Svelte" "#ff3e00" "MDX" "#fcb32c" "Nunjucks" "#3d8137" -}}
+<ul class="repo-meta">
+  {{- with .language }}<li><span class="lang-dot" style="--lang: {{ index $colors . | default "var(--slate)" | safeCSS }}"></span>{{ . }}</li>{{ end }}
+  <li aria-label="{{ .stars }} звезди">★ {{ lang.FormatNumber 0 .stars }}</li>
+  {{- if gt .forks 0 }}<li>{{ lang.FormatNumber 0 .forks }} разклонения</li>{{ end }}
+  {{- with .pushedAt }}<li>обновено {{ partial "date-short.html" . }}</li>{{ end }}
+</ul>

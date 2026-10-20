@@ -1,0 +1,5 @@
+public/
+resources/_gen/
+.hugo_build.lock
+# Генерира се от scripts/fetch-neon.sh по време на билда
+data/neon/

@@ -1,0 +1,13 @@
+{{- /* Карта на хранилище в GitHub с данни от API-то (при билда). Употреба: {{< repo "gohugoio/hugo" >}} */ -}}
+{{- $full := .Get 0 -}}
+{{- with partialCached "github/repo.html" $full $full }}
+<aside class="repo-card">
+  <a class="repo-name" href="{{ .url }}">{{ .fullName }}</a>
+  {{- with .description }}
+  <p class="repo-desc">{{ . }}</p>
+  {{- end }}
+  {{ partial "repo-meta.html" . }}
+</aside>
+{{- else }}
+<aside class="repo-card is-offline"><a class="repo-name" href="https://github.com/{{ $full }}">{{ $full }}</a></aside>
+{{- end }}

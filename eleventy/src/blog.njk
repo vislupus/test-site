@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+title: Блог
+description: Всички публикации
+permalink: /blog/
+---
+<h1 class="page-title">Блог</h1>
+<p class="page-intro">Бележки за код, математика и разходки. Всяка публикация е Markdown файл в хранилището.</p>
+<ul class="tags tag-cloud" aria-label="Всички етикети">
+  {%- for t in collections.tagList %}
+  <li><a href="/tags/{{ t.name | slugify }}/">{{ t.name }}<span class="count">{{ t.count }}</span></a></li>
+  {%- endfor %}
+</ul>
+{% set posts = collections.posts %}
+{% include "partials/post-list.njk" %}

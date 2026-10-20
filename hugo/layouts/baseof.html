@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ site.Title }}{{ else if eq .Kind "404" }}Няма такава страница – {{ site.Title }}{{ else if eq .Kind "term" }}#{{ .Title }} – {{ site.Title }}{{ else }}{{ .Title }} – {{ site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ or .Description site.Params.description }}">
+  {{ hugo.Generator }}
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{- with site.Home.OutputFormats.Get "rss" }}
+  <link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .RelPermalink }}">
+  {{- end }}
+  {{- $css := slice (resources.Get "css/site.css") (resources.Get "css/chroma.css") | resources.Concat "css/site.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+  {{- /* .WordCount рендира съдържанието предварително, за да е ясно дали има формули (виж _markup/render-passthrough.html). */}}
+  {{- $noop := .WordCount }}
+  {{- if .Store.Get "hasMath" }}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.19.0/dist/katex.min.css" integrity="sha384-3rdsX6e5mueWyoweR9NIVmtEsUkokpBT/0ALqKKIBMr9j4qhHkaIkAcGgsE6uVlp" crossorigin="anonymous">
+  {{- end }}
+  {{- if .HasShortcode "map" }}
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+  {{- end }}
+</head>
+<body>
+  <a class="skip-link" href="#main">Към съдържанието</a>
+  <div class="wrap">
+    <header class="site-header">
+      <a class="brand" href="{{ site.Home.RelPermalink }}">{{ site.Title }}</a>
+      <nav class="site-nav" aria-label="Основна навигация">
+        <ul>
+          {{- $here := .RelPermalink }}
+          {{- range slice (slice "blog/" "Блог" (slice "blog/" "tags/")) (slice "projects/" "Проекти" (slice "projects/")) (slice "gallery/" "Галерия" (slice "gallery/")) }}
+          {{- $current := false }}
+          {{- range index . 2 }}{{ if strings.HasPrefix $here (relURL .) }}{{ $current = true }}{{ end }}{{ end }}
+          <li><a href="{{ index . 0 | relURL }}"{{ if $current }} aria-current="page"{{ end }}>{{ index . 1 }}</a></li>
+          {{- end }}
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      {{ block "main" . }}{{ end }}
+    </main>
+    <footer class="site-footer">
+      <p>Генерирано с Hugo {{ hugo.Version }} на {{ now | time.Format ":date_long" }}</p>
+      <ul>
+        <li><a href="{{ "rss.xml" | relURL }}">RSS</a></li>
+        <li><a href="https://github.com/{{ site.Params.githubUser }}">GitHub</a></li>
+      </ul>
+    </footer>
+  </div>
+  {{- if .HasShortcode "map" }}
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+  {{- with resources.Get "js/map.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
+  {{- end }}
+  {{- if .Store.Get "hasGallery" }}
+  {{- with resources.Get "js/lightbox.js" | minify | fingerprint }}
+  <script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"></script>
+  {{- end }}
+  {{- end }}
+</body>
+</html>

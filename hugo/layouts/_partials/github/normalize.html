@@ -1,0 +1,6 @@
+{{- $owner := index (split .full_name "/") 0 | lower -}}
+{{- $pages := false -}}
+{{- if .has_pages -}}
+  {{- $pages = cond (eq (lower .name) (printf "%s.github.io" $owner)) (printf "https://%s.github.io/" $owner) (printf "https://%s.github.io/%s/" $owner .name) -}}
+{{- end -}}
+{{- return dict "fullName" .full_name "name" .name "url" .html_url "description" .description "stars" (int (or .stargazers_count 0)) "forks" (int (or .forks_count 0)) "language" .language "pushedAt" .pushed_at "homepage" (or .homepage false) "pagesUrl" $pages -}}

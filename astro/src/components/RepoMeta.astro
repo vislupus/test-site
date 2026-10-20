@@ -1,0 +1,14 @@
+---
+import type { Repo } from "../lib/github";
+import { number, dateShort, langColor } from "../lib/format";
+interface Props { repo: Repo }
+const { repo } = Astro.props;
+---
+<ul class="repo-meta">
+  {repo.language && (
+    <li><span class="lang-dot" style={`--lang: ${langColor[repo.language] ?? "var(--slate)"}`}></span>{repo.language}</li>
+  )}
+  <li aria-label={`${repo.stars} звезди`}>★ {number(repo.stars)}</li>
+  {repo.forks > 0 && <li>{number(repo.forks)} разклонения</li>}
+  {repo.pushedAt && <li>обновено {dateShort(repo.pushedAt)}</li>}
+</ul>

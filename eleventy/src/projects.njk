@@ -1,0 +1,29 @@
+---
+layout: layouts/base.njk
+title: Проекти
+description: Неща, които съм правил
+permalink: /projects/
+---
+<h1 class="page-title">Проекти</h1>
+<p class="page-intro">Неща, които съм правил – от хардуер до малки уеб приложения.</p>
+{% set items = projects.items %}{% set heading = "h2" %}
+{% include "partials/project-list.njk" %}
+
+<h2 class="section-title">Последни хранилища в GitHub</h2>
+{%- if not githubRepos.configured %}
+<p class="notice">Задай <code>githubUser</code> в <code>src/_data/site.js</code> и тук ще се появят последните ти публични хранилища.</p>
+{%- elif not githubRepos.repos %}
+<p class="notice">GitHub API не отговори при последния билд. Хранилищата ще се появят при следващия.</p>
+{%- else %}
+<ul class="repo-grid">
+  {%- for r in githubRepos.repos %}
+  <li>
+    <a class="name" href="{{ r.url }}">{{ r.name }}</a>
+    {% if r.description %}<p>{{ r.description }}</p>{% endif %}
+    {{ r | repoMeta | safe }}
+    {% if r.pagesUrl %}<a href="{{ r.pagesUrl }}">Сайт в GitHub Pages</a>{% endif %}
+  </li>
+  {%- endfor %}
+</ul>
+{%- endif %}
+<p class="data-source">{% if projects.source == "neon" %}Проектите са заредени от базата данни в Neon при билда.{% else %}Проектите са заредени от data/projects.json (Neon не е свързан).{% endif %}</p>

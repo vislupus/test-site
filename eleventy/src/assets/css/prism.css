@@ -1,0 +1,11 @@
+/* Оцветяване на код (Prism, от @11ty/eleventy-plugin-syntaxhighlight) – светла и тъмна тема. */
+:root { --tok-comment: #6a737d; --tok-keyword: #cf222e; --tok-string: #0a3069; --tok-fn: #8250df; --tok-num: #0550ae; --tok-punct: #57606a; }
+@media (prefers-color-scheme: dark) {
+  :root { --tok-comment: #8b949e; --tok-keyword: #ff7b72; --tok-string: #a5d6ff; --tok-fn: #d2a8ff; --tok-num: #79c0ff; --tok-punct: #9da7b1; }
+}
+.token.comment, .token.prolog, .token.doctype, .token.cdata { color: var(--tok-comment); font-style: italic; }
+.token.keyword, .token.operator, .token.important, .token.atrule, .token.selector { color: var(--tok-keyword); }
+.token.string, .token.char, .token.attr-value, .token.regex, .token.url { color: var(--tok-string); }
+.token.function, .token.class-name, .token.builtin { color: var(--tok-fn); }
+.token.number, .token.boolean, .token.constant, .token.symbol, .token.property, .token.variable { color: var(--tok-num); }
+.token.punctuation { color: var(--tok-punct); }

@@ -1,0 +1,17 @@
+{{- /*
+  Проектите: data/neon/projects.json (изтеглен от Neon с scripts/fetch-neon.sh преди билда),
+  иначе data/projects.json. Всеки проект с поле repo се обогатява с данни от GitHub.
+*/ -}}
+{{- $source := "local" -}}
+{{- $items := hugo.Data.projects -}}
+{{- with index hugo.Data "neon" -}}
+  {{- with .projects -}}{{- $items = . -}}{{- $source = "neon" -}}{{- end -}}
+{{- end -}}
+{{- $items = (where $items "featured" true) | append (where $items "featured" "!=" true) -}}
+{{- $enriched := slice -}}
+{{- range $items -}}
+  {{- $gh := false -}}
+  {{- with .repo }}{{ $gh = partialCached "github/repo.html" . . }}{{ end -}}
+  {{- $enriched = $enriched | append (merge . (dict "gh" $gh)) -}}
+{{- end -}}
+{{- return dict "source" $source "items" $enriched -}}

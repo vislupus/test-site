@@ -1,0 +1,28 @@
+{{ define "main" }}
+<h1 class="page-title">{{ .Title }}</h1>
+<p class="page-intro">{{ .Description }}</p>
+{{ $projects := partial "projects.html" . }}
+{{ partial "project-list.html" (dict "items" $projects.items "heading" "h2") }}
+
+<h2 class="section-title">Последни хранилища в GitHub</h2>
+{{- $user := site.Params.githubUser }}
+{{- if eq $user "your-username" }}
+<p class="notice">Задай <code>githubUser</code> в <code>hugo.toml</code> и тук ще се появят последните ти публични хранилища.</p>
+{{- else }}
+  {{- with partialCached "github/user-repos.html" $user $user }}
+<ul class="repo-grid">
+    {{- range . }}
+  <li>
+    <a class="name" href="{{ .url }}">{{ .name }}</a>
+    {{ with .description }}<p>{{ . }}</p>{{ end }}
+    {{ partial "repo-meta.html" . }}
+    {{ with .pagesUrl }}<a href="{{ . }}">Сайт в GitHub Pages</a>{{ end }}
+  </li>
+    {{- end }}
+</ul>
+  {{- else }}
+<p class="notice">GitHub API не отговори при последния билд. Хранилищата ще се появят при следващия.</p>
+  {{- end }}
+{{- end }}
+<p class="data-source">{{ if eq $projects.source "neon" }}Проектите са заредени от базата данни в Neon при билда.{{ else }}Проектите са заредени от data/projects.json (Neon не е свързан).{{ end }}</p>
+{{ end }}

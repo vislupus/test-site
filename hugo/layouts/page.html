@@ -1,0 +1,14 @@
+{{ define "main" }}
+<article>
+  <header class="post-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{- if eq .Section "blog" }}
+    <p class="post-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>, {{ .ReadingTime }} мин. четене</p>
+    {{ partial "tags.html" . }}
+    {{- end }}
+  </header>
+  <div class="prose">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

@@ -1,0 +1,4 @@
+{{- /* Едно хранилище, напр. "gohugoio/hugo". Викай го с partialCached, за да се тегли веднъж. */ -}}
+{{- $result := false -}}
+{{- with partial "github/request.html" (printf "/repos/%s" .) }}{{ $result = partial "github/normalize.html" . }}{{ end -}}
+{{- return $result -}}

@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Tags from "../../components/Tags.astro";
+import Map from "../../components/Map.astro";
+import RepoCard from "../../components/RepoCard.astro";
+import { dateLong, readingTime } from "../../lib/format";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+---
+<Base title={post.data.title} description={post.data.description} math={Boolean(remarkPluginFrontmatter.hasMath)}>
+  <article>
+    <header class="post-header">
+      <h1 class="page-title">{post.data.title}</h1>
+      <p class="post-meta">
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{dateLong(post.data.date)}</time>{", "}
+        {readingTime(post.body)} мин. четене
+      </p>
+      <Tags tags={post.data.tags} />
+    </header>
+    <div class="prose">
+      <!-- Map и RepoCard са достъпни във всеки .mdx файл без import -->
+      <Content components={{ Map, RepoCard }} />
+    </div>
+  </article>
+</Base>

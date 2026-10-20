@@ -1,0 +1,9 @@
+{{- /* Последните публични хранилища на потребител (без forks и архивирани). */ -}}
+{{- $result := false -}}
+{{- with partial "github/request.html" (printf "/users/%s/repos?sort=pushed&per_page=100&type=owner" .) -}}
+  {{- $result = slice -}}
+  {{- range first 8 (where (where . "fork" false) "archived" false) -}}
+    {{- $result = $result | append (partial "github/normalize.html" .) -}}
+  {{- end -}}
+{{- end -}}
+{{- return $result -}}

@@ -1,0 +1,6 @@
+{{ define "main" }}
+<h1 class="page-title">#{{ .Title }}</h1>
+{{ $n := len .Pages }}
+<p class="page-intro">{{ if eq $n 1 }}1 публикация{{ else }}{{ $n }} публикации{{ end }} с този етикет. <a href="{{ "blog/" | relURL }}">Всички публикации</a></p>
+{{ partial "post-list.html" .Pages }}
+{{ end }}

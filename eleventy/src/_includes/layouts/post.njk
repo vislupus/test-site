@@ -1,0 +1,13 @@
+---
+layout: layouts/base.njk
+---
+<article>
+  <header class="post-header">
+    <h1 class="page-title">{{ title }}</h1>
+    <p class="post-meta"><time datetime="{{ page.date | isoDate }}">{{ page.date | dateLong }}</time>, {{ content | readingTime }} мин. четене</p>
+    {% include "partials/tags.njk" %}
+  </header>
+  <div class="prose">
+    {{ content | safe }}
+  </div>
+</article>
