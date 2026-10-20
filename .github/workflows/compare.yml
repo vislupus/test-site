@@ -107,6 +107,16 @@ jobs:
           JSON
           cat out/stats.json
 
+          # Времената и в обобщението на пускането (таб Summary в Actions).
+          echo "::notice title=Билд::$(tr -d '\n ' < out/stats.json)"
+          {
+            echo "| Генератор | Версия | Билд | Размер | Файлове |"
+            echo "| --- | --- | --- | --- | --- |"
+            for g in astro eleventy hugo jekyll; do
+              node -e "const s = require('./out/stats.json')['$g']; console.log('| $g | ' + s.version + ' | ' + (s.ms / 1000).toFixed(1) + ' с | ' + s.kb + ' KB | ' + s.files + ' |')"
+            done
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - uses: actions/upload-pages-artifact@v5
         with:
           path: out
